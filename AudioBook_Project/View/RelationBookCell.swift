@@ -1,0 +1,19 @@
+//
+//  RelationBookCell.swift
+//  AudioBook_Project
+//
+//  Created by Cuong  Pham on 10/31/19.
+//  Copyright © 2019 Cuong  Pham. All rights reserved.
+//
+
+import UIKit
+
+class RelationBookCell: UICollectionViewCell {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
