@@ -17,6 +17,8 @@ class AuthorDetailScreen: UIViewController {
     var id_author : Int!
     
     private lazy var mainScrollView : MyScrollView = MyScrollView()
+    
+    private lazy var relateArray : Array<Book> = []
 //NOTE: container view 1 chứa avatar
     private lazy var avatarImage : UIImageView = {
         let image = UIImageView()
@@ -97,11 +99,32 @@ class AuthorDetailScreen: UIViewController {
     fileprivate func setUpContainer3(){
         mainScrollView.sv(containerView3)
         containerView3.centerHorizontally().width(100%).Top == containerView2.Bottom + 5
-        containerView3.Bottom == view.Bottom - 20
+        containerView3.Bottom == view.safeAreaLayoutGuide.Bottom
         
-        containerView3.sv(relateLabel)
+        containerView3.sv(relateLabel, relateCollection)
+        
         relateLabel.Leading == containerView3.Leading + 20
         relateLabel.Top == containerView3.Top + 5
+        
+        relateCollection.Leading == relateLabel.Leading
+        relateCollection.Trailing == containerView3.Trailing - 20
+        relateCollection.Top == relateLabel.Bottom + 10
+        relateCollection.Bottom == containerView3.Bottom - 10
+        
+        self.setUpCollectionView()
+    }
+    
+    fileprivate func setUpCollectionView(){
+        self.relateCollection.delegate = self
+        self.relateCollection.dataSource = self
+        self.relateCollection.register(BookCell.self, forCellWithReuseIdentifier: "book")
+        
+        self.relateCollection.backgroundColor = .clear
+        if let flowLayout = self.relateCollection.collectionViewLayout as? UICollectionViewFlowLayout {
+            flowLayout.scrollDirection = .vertical
+        }
+        self.relateCollection.showsVerticalScrollIndicator = false
+        self.relateCollection.bounces = false
     }
     
     fileprivate func setUpNavigation(){
@@ -128,6 +151,26 @@ class AuthorDetailScreen: UIViewController {
                                 self.updateUI(json)
                             }
         }
+        Alamofire.request(BOOKBY_AUTHOR_ID_URL,
+                          method: .post,
+                          parameters: para,
+                          encoding: URLEncoding.default,
+                          headers: nil).responseJSON { (response) in
+                            switch response.result{
+                            case .failure(let error):
+                                print(error)
+                            case .success(let value):
+                                let json = JSON(value)
+                                let jsonArray = json["book"].arrayValue
+                                for bookObj in jsonArray {
+                                    let _book = Book(_json: bookObj)
+                                    self.relateArray.append(_book)
+                                    DispatchQueue.main.async {
+                                        self.relateCollection.reloadData()
+                                    }
+                                }
+                            }
+        }
     }
     
     fileprivate func updateUI(_ source : JSON){
@@ -139,5 +182,36 @@ class AuthorDetailScreen: UIViewController {
     
     @objc func onTapBack(){
         self.navigationController?.popViewController(animated: true)
+    }
+}
+
+extension AuthorDetailScreen : UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.relateArray.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = self.relateCollection.dequeueReusableCell(withReuseIdentifier: "book", for: indexPath) as? BookCell else { fatalError() }
+        cell.avatarImage.sd_setImage(with: URL(string: self.relateArray[indexPath.row].image), completed: nil)
+        cell.nameLabel.text = self.relateArray[indexPath.row].name
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 130, height: 200)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 20
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 30
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let nextScreen = BookDetailScreen()
+        nextScreen.id_book = self.relateArray[indexPath.row].id
+        self.navigationController?.pushViewController(nextScreen, animated: true)
     }
 }

@@ -29,3 +29,5 @@ let BOOK_BY_ID_URL = "\(BASE_URL)get_book_by_id.php"
 let MOST_VIEW_ALL_BOOK = "\(BASE_URL)get_all_most_view_book.php"
 
 let MOST_LIKED_ALL_BOOK = "\(BASE_URL)get_all_most_like_book.php"
+
+let BOOKBY_AUTHOR_ID_URL = "\(BASE_URL)get_book_by_author.php"
