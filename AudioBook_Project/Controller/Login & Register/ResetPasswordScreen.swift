@@ -1,15 +1,15 @@
 //
-//  AuthorScreen.swift
+//  ResetPasswordScreen.swift
 //  AudioBook_Project
 //
-//  Created by Cuong  Pham on 10/24/19.
+//  Created by Cuong  Pham on 11/7/19.
 //  Copyright © 2019 Cuong  Pham. All rights reserved.
 //
 
 import UIKit
 import Stevia
 
-class AuthorScreen: UIViewController {
+class ResetPasswordScreen: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

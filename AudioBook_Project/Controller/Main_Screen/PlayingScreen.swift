@@ -27,23 +27,9 @@ class PlayingScreen: UIViewController {
         return label
     }()
     
-    private lazy var categoryLabel : UILabel = {
-        let label = UILabel()
-        label.sizeToFit()
-        label.textColor = .black
-        label.text = "Thể loại: "
-        label.font = UIFont.systemFont(ofSize: 16)
-        return label
-    }()
+    private lazy var categoryLabel : SubTitleLabel = SubTitleLabel("Thể loại:")
     
-    private lazy var trapLabel : UILabel = {
-        let label = UILabel()
-        label.sizeToFit()
-        label.textColor = .black
-        label.text = "Phần: "
-        label.font = UIFont.systemFont(ofSize: 16)
-        return label
-    }()
+    private lazy var trapLabel : SubTitleLabel = SubTitleLabel("Phần: ")
     
     lazy var discImage : UIImageView = {
         let image = UIImageView()
@@ -62,25 +48,9 @@ class PlayingScreen: UIViewController {
         return slider
     }()
     
-    private lazy var beginLabel : UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.sizeToFit()
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.text = "00:00"
-        label.alpha = 0.6
-        return label
-    }()
+    private lazy var beginLabel : SubTitleLabel = SubTitleLabel("")
     
-    private lazy var finishLabel : UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.sizeToFit()
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.text = "59:59"
-        label.alpha = 0.6
-        return label
-    }()
+    private lazy var finishLabel : SubTitleLabel = SubTitleLabel("")
     
     private lazy var playButton : UIButton = {
         let button = UIButton()
@@ -142,6 +112,9 @@ class PlayingScreen: UIViewController {
         discImage.image = UIImage(named: "chi-pheo")
         
         self.navigationController?.tabBarItem.badgeValue = "1"
+        
+        self.finishLabel.text = "59:59"
+        self.beginLabel.text = "00:01"
     }
     
     fileprivate func setUpNavigation(){
@@ -166,9 +139,11 @@ class PlayingScreen: UIViewController {
         
         beginLabel.Leading == timeSlider.Leading
         beginLabel.Top == timeSlider.Bottom + 5
+        beginLabel.alpha = 0.6
         
         finishLabel.Trailing == timeSlider.Trailing
         finishLabel.Top == timeSlider.Bottom + 5
+        finishLabel.alpha = 0.6
         
         controlStackView.addArrangedSubview(clockButton)
         controlStackView.addArrangedSubview(previousButton)

@@ -18,6 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        navi.navigationBar.barTintColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = CustomTabbar()
+//        let navi = UINavigationController(rootViewController: LoginScreen())
+//        window?.rootViewController = navi
         window?.makeKeyAndVisible()
         // Override point for customization after application launch.
         return true

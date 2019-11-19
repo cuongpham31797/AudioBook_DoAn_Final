@@ -8,59 +8,48 @@
 //                              MÀN CHI TIẾT TRUYỆN
 import UIKit
 import Stevia
+import Alamofire
+import SwiftyJSON
+import SDWebImage
+import SVProgressHUD
 
 class BookDetailScreen: UIViewController {
     
-    private lazy var mainScrollView : UIScrollView = {
-        let scroll = UIScrollView()
-        scroll.backgroundColor = .white
-        scroll.contentSize.height = 1200
-        scroll.bounces = false
-        scroll.showsVerticalScrollIndicator = true
-        return scroll
-    }()
+    var id_book : Int!
+    private lazy var mainScrollView : MyScrollView = MyScrollView()
 
 //NOTE: view trên đầu bao gồm bìa sách, tên sách, tên tác giả, tên thể loại
-    private lazy var firstView : UIView = {
-        let view = UIView()
-        view.backgroundColor = #colorLiteral(red: 0.9534785151, green: 0.9497569203, blue: 0.9563729167, alpha: 1)
-        return view
-    }()
+    private lazy var firstView : ContainerView = ContainerView()
     
     lazy var bookImage : UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(named: "thien_long_bat_bo")
-        image.contentMode = .scaleAspectFill
+        image.contentMode = UIView.ContentMode.scaleToFill
         return image
     }()
     
     lazy var bookNameLabel : UILabel = {
         let label = UILabel()
-        label.sizeToFit()
         label.font = UIFont.boldSystemFont(ofSize: 18)
+        label.numberOfLines = 2
         label.textColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
-        label.text = "Ỷ thiên đồ long ký"
-        label.textAlignment = .left
         return label
     }()
     
     lazy var authorLabel : UILabel = {
         let label = UILabel()
-        label.sizeToFit()
+        //label.sizeToFit()
         label.font = UIFont.systemFont(ofSize: 16)
         label.textColor = .black
-        label.text = "Tác giả: Kim Dung"
-        label.textAlignment = .left
+        label.numberOfLines = 2
         return label
     }()
     
     lazy var categoryLabel : UILabel = {
         let label = UILabel()
-        label.sizeToFit()
+        //label.sizeToFit()
         label.font = UIFont.systemFont(ofSize: 16)
         label.textColor = .black
-        label.text = "Thể loại: Kiếm hiệp"
-        label.textAlignment = .left
+        label.numberOfLines = 2
         return label
     }()
     
@@ -91,11 +80,7 @@ class BookDetailScreen: UIViewController {
     }()
 //---------------------------------------------------------------------------------------------------
 //NOTE: view thứ hai bao gồm 3 nút like, lượt nghe, share
-    private lazy var secondView : UIView = {
-        let view = UIView()
-        view.backgroundColor = #colorLiteral(red: 0.9534785151, green: 0.9497569203, blue: 0.9563729167, alpha: 1)
-        return view
-    }()
+    private lazy var secondView : ContainerView = ContainerView()
     
     private lazy var likeImage : UIImageView = {
         let image = UIImageView()
@@ -104,14 +89,7 @@ class BookDetailScreen: UIViewController {
         return image
     }()
     
-    private lazy var likeLabel : UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.sizeToFit()
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.text = "1234"
-        return label
-    }()
+    private lazy var likeLabel : SubTitleLabel = SubTitleLabel("")
     
     private lazy var viewImage : UIImageView = {
         let image = UIImageView()
@@ -120,14 +98,7 @@ class BookDetailScreen: UIViewController {
         return image
     }()
     
-    private lazy var viewLabel : UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.sizeToFit()
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.text = "1234"
-        return label
-    }()
+    private lazy var viewLabel : SubTitleLabel = SubTitleLabel("")
     
     private lazy var shareImage : UIImageView = {
         let image = UIImageView()
@@ -136,14 +107,7 @@ class BookDetailScreen: UIViewController {
         return image
     }()
     
-    private lazy var shareLabel : UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.sizeToFit()
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.text = "Chia sẻ"
-        return label
-    }()
+    private lazy var shareLabel : SubTitleLabel = SubTitleLabel("Chia sẻ")
     
     private lazy var likeView : UIView = {
         let view = UIView()
@@ -176,76 +140,32 @@ class BookDetailScreen: UIViewController {
     }()
 //---------------------------------------------------------------------------------------------------
 //NOTE: view thứ 3 gồm 1 label và 1 textview giới thiệu truyện
-    private lazy var thirdView : UIView = {
-        let view = UIView()
-        view.backgroundColor = #colorLiteral(red: 0.9534785151, green: 0.9497569203, blue: 0.9563729167, alpha: 1)
-        return view
-    }()
+    private lazy var thirdView : ContainerView = ContainerView()
     
-    private lazy var introLabel : UILabel = {
-        let label = UILabel()
-        label.text = "Giới thiệu:"
-        label.textColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
-        label.font = UIFont.boldSystemFont(ofSize: 16)
-        label.sizeToFit()
-        return label
-    }()
+    private lazy var introLabel : TitleLabel = TitleLabel("Giới thiệu")
     
-    private lazy var introTextView : UITextView = {
-        let textView = UITextView()
+    private lazy var contentLabel : UILabel = {
+        let textView = UILabel()
         textView.textColor = .black
         textView.font = UIFont.systemFont(ofSize: 16)
-        textView.text = "Giới thiệu:Giới thiệu: Giới thiệu: Giới thiệu:Giới thiệu:Giới thiệu:Giới thiệu:Giới thiệu: Giới thiệu:Giới thiệu:Giới thiệu:Giới thiệu:Giới thiệu: Giới thiệu:Giới thiệu:Giới thiệu:Giới thiệu:Giới thiệu: Giới thiệu:Giới thiệu:Giới thiệu:Giới thiệu:Giới thiệu: Giới thiệu:Giới thiệu:Giới thiệu:Giới thiệu:Giới thiệu: Giới thiệu:Giới thiệu:Giới thiệu:Giới thiệu:    Giới thiệu:Giới thiệu:Giới thiệu:Giới thiệu:Giới thiệu: Giới thiệu:Giới thiệu:"
-        textView.backgroundColor = .clear
-        textView.showsVerticalScrollIndicator = false
-        textView.bounces = false
-        //textView.sizeToFit()
+        textView.numberOfLines = 0
+        textView.sizeToFit()
         return textView
     }()
 //---------------------------------------------------------------------------------------------------
 //NOTE: view thứ 4 gồm 1 collection view và 1 label
     private lazy var relationBookCollectionView : UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     
-    private lazy var relationLabel : UILabel = {
-        let label = UILabel()
-        label.text = "Có thể bạn cũng thích"
-        label.textColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
-        label.font = UIFont.boldSystemFont(ofSize: 16)
-        label.sizeToFit()
-        return label
-    }()
+    private lazy var relationLabel : TitleLabel = TitleLabel("Có thể bạn cũng thích")
     
-    private lazy var fourthView : UIView = {
-        let view = UIView()
-        view.backgroundColor = #colorLiteral(red: 0.9534785151, green: 0.9497569203, blue: 0.9563729167, alpha: 1)
-        return view
-    }()
+    private lazy var fourthView : ContainerView = ContainerView()
 //---------------------------------------------------------------------------------------------------
 //NOTE: view thứ 5 gồm 1 table view, 1 label, 1 button
-    private lazy var fifthView : UIView = {
-        let view = UIView()
-        view.backgroundColor = #colorLiteral(red: 0.9534785151, green: 0.9497569203, blue: 0.9563729167, alpha: 1)
-        return view
-    }()
+    private lazy var fifthView : ContainerView = ContainerView()
     
-    private lazy var commentLabel : UILabel = {
-        let label = UILabel()
-        label.text = "Nhận xét:"
-        label.textColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
-        label.sizeToFit()
-        label.font = UIFont.boldSystemFont(ofSize: 16)
-        return label
-    }()
+    private lazy var commentLabel : TitleLabel = TitleLabel("Nhận xét")
     
-    lazy var numberOfCommentLabel : UILabel = {
-        let label = UILabel()
-        label.text = "0"
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.sizeToFit()
-        label.textColor = .black
-        label.alpha = 0.6
-        return label
-    }()
+    lazy var numberOfCommentLabel : SubTitleLabel = SubTitleLabel("")
     
     private lazy var allCommentButton : UIButton = {
         let button = UIButton()
@@ -260,11 +180,49 @@ class BookDetailScreen: UIViewController {
 //---------------------------------------------------------------------------------------------------
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        SVProgressHUD.show()
         self.setUpNavigation()
         self.setUpLayout()
         self.setUpCollectionView()
+        self.getData()
+        print(self.id_book!)
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+    }
+//NOTE: get data
+    fileprivate func getData(){
+        guard let id = self.id_book else { return }
+        let para : Parameters = [
+            "id_book" : id
+        ]
+        Alamofire.request(BOOK_BY_ID_URL,
+                          method: .post,
+                          parameters: para,
+                          encoding: URLEncoding.default,
+                          headers: nil).responseJSON { (response) in
+                            switch response.result {
+                            case .failure(let error):
+                                print(error)
+                            case .success(let value):
+                                let json = JSON(value)
+                                self.updateUI(json)
+                            }
+        }
+    }
+    
+    fileprivate func updateUI(_ source : JSON){
+        self.bookImage.sd_setImage(with: URL(string: source["book"]["image"].stringValue), completed: nil)
+        self.bookNameLabel.text = source["book"]["book_name"].stringValue
+        self.categoryLabel.text = "Thể loại: " + source["book"]["category_name"].stringValue
+        self.authorLabel.text = "Tác giả: " + source["book"]["author_name"].stringValue
+        self.contentLabel.text = source["book"]["introduction"].stringValue
+        self.viewLabel.text = String(source["book"]["views"].intValue)
+        self.likeLabel.text = String(source["book"]["liked"].intValue)
+        SVProgressHUD.dismiss()
+    }
+//----------------------------------------------------------------------------------------------
 //NOTE: Setup navigation
     fileprivate func setUpNavigation(){
     //NOTE: thay đổi font chữ, màu chữ và màu nền của navigation title
@@ -272,6 +230,9 @@ class BookDetailScreen: UIViewController {
                               NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 22)]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.navigationBar.barTintColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
+        
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "back-2"), style: .done, target: self, action: #selector(onTapBack))
+        self.navigationItem.leftBarButtonItem?.tintColor = .white
     //---------------------------------------------------------------------------------------------------
         self.navigationItem.title = "Chi tiết truyện"
     }
@@ -279,35 +240,37 @@ class BookDetailScreen: UIViewController {
 //NOTE: layout cho view đầu tiên
     fileprivate func setUpLayoutForFirstView() {
         mainScrollView.sv(firstView)
-        firstView.centerHorizontally().width(100%).height(250).Top == mainScrollView.Top
+        firstView.centerHorizontally().width(100%).height(230).Top == mainScrollView.Top
         
         firstView.sv(bookImage, bookNameLabel, categoryLabel, authorLabel, listenView)
         
-        bookImage.Leading == firstView.Leading + 40
-        bookImage.Top == firstView.Top + 10
-        bookImage.Bottom == firstView.Bottom - 10
-        bookImage.width(100)
+        bookImage.Leading == firstView.Leading + 20
+        bookImage.Top == firstView.Top + 20
+        bookImage.width(130).height(200)
         
-        bookNameLabel.Top == bookImage.Top + 20
-        bookNameLabel.Leading == bookImage.Trailing + 40
+        bookNameLabel.Top == bookImage.Top + 10
+        bookNameLabel.Leading == bookImage.Trailing + 30
+        bookNameLabel.Trailing == firstView.Trailing - 10
         
-        authorLabel.Top == bookNameLabel.Bottom + 20
+        authorLabel.Top == bookNameLabel.Bottom + 15
         authorLabel.Leading == bookNameLabel.Leading
+        authorLabel.Trailing == firstView.Trailing - 10
         
-        categoryLabel.Top == authorLabel.Bottom + 20
+        categoryLabel.Top == authorLabel.Bottom + 15
         categoryLabel.Leading == bookNameLabel.Leading
+        categoryLabel.Trailing == firstView.Trailing - 10
         
         listenView.sv(listenImage, listenLabel)
         listenImage.centerVertically().size(25).Leading == listenView.Leading + 10
         listenLabel.centerVertically().Leading == listenImage.Trailing + 10
         listenView.Leading == bookNameLabel.Leading
-        listenView.width(150).height(45).Bottom == bookImage.Bottom - 20
+        listenView.width(150).height(45).Bottom == bookImage.Bottom
     }
 //----------------------------------------------------------------------------------------------
 //NOTE: layout cho view thứ hai
     fileprivate func setUpLayoutForSecondView(){
         mainScrollView.sv(secondView)
-        secondView.centerHorizontally().width(100%).height(80).Top == firstView.Bottom + 5
+        secondView.centerHorizontally().width(100%).height(60).Top == firstView.Bottom + 5
         
         likeView.sv(likeImage, likeLabel)
         likeImage.centerHorizontally().width(80%).height(60%).Top == likeView.Top
@@ -333,15 +296,15 @@ class BookDetailScreen: UIViewController {
 //NOTE: layout cho view thứ ba
     fileprivate func setUpLayoutForThirdView(){
         mainScrollView.sv(thirdView)
-        thirdView.centerHorizontally().width(100%).height(230).Top == secondView.Bottom + 5
-        thirdView.sv(introLabel, introTextView)
+        thirdView.centerHorizontally().width(100%).Top == secondView.Bottom + 5
+        thirdView.sv(introLabel, contentLabel)
         introLabel.Top == thirdView.Top + 5
         introLabel.Leading == thirdView.Leading + 20
         
-        introTextView.Leading == introLabel.Leading
-        introTextView.Top == introLabel.Bottom + 5
-        introTextView.Trailing == thirdView.Trailing - 15
-        introTextView.height(200)
+        contentLabel.Leading == introLabel.Leading
+        contentLabel.Trailing == thirdView.Trailing - 20
+        contentLabel.Top == introLabel.Bottom + 5
+        contentLabel.Bottom == thirdView.Bottom - 10
     }
 //----------------------------------------------------------------------------------------------
 //NOTE: layout cho view thứ tư
@@ -370,6 +333,7 @@ class BookDetailScreen: UIViewController {
         
         numberOfCommentLabel.Top == fifthView.Top + 5
         numberOfCommentLabel.Leading == commentLabel.Trailing + 10
+        numberOfCommentLabel.alpha = 0.6
         
         commentTableView.Leading == commentLabel.Leading
         commentTableView.Top == commentLabel.Bottom + 10
@@ -410,6 +374,10 @@ class BookDetailScreen: UIViewController {
     
     @objc func onTapViewAllComment(){
         print("view all comment")
+    }
+    
+    @objc func onTapBack(){
+        self.navigationController?.popViewController(animated: true)
     }
 }
 

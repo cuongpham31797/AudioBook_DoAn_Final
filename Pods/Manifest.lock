@@ -1,5 +1,7 @@
 PODS:
   - Alamofire (4.9.0)
+  - FSPagerView (0.8.3)
+  - SCLAlertView (0.8)
   - SDWebImage (5.2.3):
     - SDWebImage/Core (= 5.2.3)
   - SDWebImage/Core (5.2.3)
@@ -9,6 +11,8 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - FSPagerView
+  - SCLAlertView
   - SDWebImage
   - SteviaLayout
   - SVProgressHUD
@@ -17,6 +21,8 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
+    - FSPagerView
+    - SCLAlertView
     - SDWebImage
     - SteviaLayout
     - SVProgressHUD
@@ -24,11 +30,13 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Alamofire: afc3e7c6db61476cb45cdd23fed06bad03bbc321
+  FSPagerView: 670405b2f18e2a87fa37f20b00de783e562c25a8
+  SCLAlertView: 6a77bb2edfc65e04dbe57725546cb4107a506b85
   SDWebImage: 46a7f73228f84ce80990c786e4372cf4db5875ce
   SteviaLayout: 0c83442390c8a369c21f975ffbd812d11532645b
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
 
-PODFILE CHECKSUM: e0741d524509e3b3df4548e2d122b135640427a5
+PODFILE CHECKSUM: d4fd8844683a3bc038f8f5076ea802b6546b6db9
 
 COCOAPODS: 1.8.4

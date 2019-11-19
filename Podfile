@@ -9,6 +9,8 @@ pod 'SwiftyJSON'
 pod 'SDWebImage'
 pod 'SteviaLayout'
 pod 'SVProgressHUD'
+pod 'FSPagerView'
+pod 'SCLAlertView'
   # Pods for AudioBook_Project
 
 end

@@ -12,11 +12,7 @@ import Stevia
 class AccountScreen: UIViewController {
     
 //NOTE: setup view đầu tiên
-    private lazy var firstView : UIView = {
-        let view : UIView = UIView()
-        view.backgroundColor = .white
-        return view
-    }()
+    private lazy var firstView : ContainerView = ContainerView()
     
     private lazy var avatarImage : UIImageView = {
         let image : UIImageView = UIImageView()
@@ -25,23 +21,9 @@ class AccountScreen: UIViewController {
         return image
     }()
     
-    private lazy var emailLabel : UILabel = {
-        let label = UILabel()
-        label.text = "Email: cuongpham797013@gmail.com"
-        label.textColor = .black
-        label.sizeToFit()
-        label.font = UIFont.systemFont(ofSize: 16)
-        return label
-    }()
+    private lazy var emailLabel : SubTitleLabel = SubTitleLabel("Email: email@gmail.com")
     
-    private lazy var dateLabel : UILabel = {
-        let label = UILabel()
-        label.text = "Ngày lập: 1/11/2019"
-        label.sizeToFit()
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = .black
-        return label
-    }()
+    private lazy var dateLabel : SubTitleLabel = SubTitleLabel("Ngày lập: ")
     
     private lazy var changePasswordButton : UIButton = {
         let button = UIButton()
@@ -56,30 +38,22 @@ class AccountScreen: UIViewController {
 //---------------------------------------------------------------------------------------------------
 //NOTE: setup view thứ hai
     private lazy var secondView : UIView = {
-        let view : UIView = UIView()
+        let view = UIView()
         view.backgroundColor = #colorLiteral(red: 0.9534785151, green: 0.9497569203, blue: 0.9563729167, alpha: 1)
         return view
     }()
     
     private lazy var secondTitleLabel : UILabel = {
         let label = UILabel()
-        label.text = "Sách của tôi"
-        label.textColor = .black
-        label.font = UIFont.boldSystemFont(ofSize: 16)
         label.sizeToFit()
-        label.alpha = 0.4
+        label.font = UIFont.boldSystemFont(ofSize: 18)
+        label.textColor = .black
+        label.text = "Sách của tôi"
         return label
     }()
 //---------------------------------------------------------------------------------------------------
 //NOTE: setup view thứ ba
-    private lazy var thirdView : UIView = {
-        let view = UIView()
-        view.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(onTapLiked))
-        view.addGestureRecognizer(tap)
-        view.backgroundColor = .white
-        return view
-    }()
+    private lazy var thirdView : ContainerView = ContainerView()
     
     private lazy var likeImage : UIImageView = {
         let image = UIImageView()
@@ -88,14 +62,7 @@ class AccountScreen: UIViewController {
         return image
     }()
     
-    private lazy var likeLabel : UILabel = {
-        let label = UILabel()
-        label.text = "Đã thích"
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.sizeToFit()
-        return label
-    }()
+    private lazy var likeLabel : SubTitleLabel = SubTitleLabel("Đã thích")
 //---------------------------------------------------------------------------------------------------
 //NOTE: setup view thứ tư
     private lazy var fourthView : UIView = {
@@ -106,11 +73,10 @@ class AccountScreen: UIViewController {
     
     private lazy var applicationLabel : UILabel = {
         let label = UILabel()
-        label.text = "Ứng dụng"
-        label.textColor = .black
         label.sizeToFit()
-        label.font = UIFont.boldSystemFont(ofSize: 16)
-        label.alpha = 0.4
+        label.font = UIFont.boldSystemFont(ofSize: 18)
+        label.textColor = .black
+        label.text = "Ứng dụng"
         return label
     }()
 //---------------------------------------------------------------------------------------------------
@@ -124,14 +90,7 @@ class AccountScreen: UIViewController {
         return view
     }()
     
-    private lazy var introLabel : UILabel = {
-        let label = UILabel()
-        label.text = "Giới thiệu về ứng dụng"
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.sizeToFit()
-        return label
-    }()
+    private lazy var introLabel : SubTitleLabel = SubTitleLabel("Giới thiệu về ứng dụng")
     
     private lazy var introImage : UIImageView = {
         let image = UIImageView()
@@ -157,14 +116,7 @@ class AccountScreen: UIViewController {
         return image
     }()
     
-    private lazy var shareLabel : UILabel = {
-        let label = UILabel()
-        label.text = "Chia sẻ ứng dụng"
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.sizeToFit()
-        return label
-    }()
+    private lazy var shareLabel : SubTitleLabel = SubTitleLabel("Chia sẻ ứng dụng")
 //---------------------------------------------------------------------------------------------------
 //NOTE: setup view thứ bảy
     private lazy var seventhView : UIView = {
@@ -183,14 +135,7 @@ class AccountScreen: UIViewController {
         return image
     }()
     
-    private lazy var reviewLabel : UILabel = {
-        let label = UILabel()
-        label.text = "Góp ý"
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.sizeToFit()
-        return label
-    }()
+    private lazy var reviewLabel : SubTitleLabel = SubTitleLabel("Góp ý")
 //---------------------------------------------------------------------------------------------------
 //NOTE: setup view thứ tám
     private lazy var eighthView : UIView = {
@@ -209,14 +154,7 @@ class AccountScreen: UIViewController {
         return image
     }()
     
-    private lazy var ratingLabel : UILabel = {
-        let label = UILabel()
-        label.text = "Đánh giá ứng dụng"
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.sizeToFit()
-        return label
-    }()
+    private lazy var ratingLabel : SubTitleLabel = SubTitleLabel("Đánh giá ứng dụng")
 //---------------------------------------------------------------------------------------------------
 //NOTE: setup view thứ chín
     private lazy var ninethView : UIView = {
@@ -230,7 +168,7 @@ class AccountScreen: UIViewController {
         let view = UIView()
         view.backgroundColor = .clear
         view.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(onTapRating))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(onTapLogout))
         view.addGestureRecognizer(tap)
         return view
     }()
@@ -242,14 +180,7 @@ class AccountScreen: UIViewController {
         return image
     }()
     
-    private lazy var logoutLabel : UILabel = {
-        let label = UILabel()
-        label.text = "Đăng xuất"
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.sizeToFit()
-        return label
-    }()
+    private lazy var logoutLabel : SubTitleLabel = SubTitleLabel("Đăng xuất")
 //---------------------------------------------------------------------------------------------------
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -270,6 +201,9 @@ class AccountScreen: UIViewController {
     }
     
     fileprivate func setUpLayout(){
+        
+        secondTitleLabel.alpha = 0.4
+        applicationLabel.alpha = 0.4
         setUpFirstView()
         setUpSecondView()
         setUpThirdView()

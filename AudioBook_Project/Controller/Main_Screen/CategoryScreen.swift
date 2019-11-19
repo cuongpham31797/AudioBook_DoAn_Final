@@ -29,6 +29,10 @@ class CategoryScreen: UIViewController {
         setUpCollectionView()
     }
     
+    deinit {
+        print("category deinit")
+    }
+    
     fileprivate func setUpNavigation(){
         //NOTE: thay đổi font chữ và màu chữ của navigation title
         let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white,
