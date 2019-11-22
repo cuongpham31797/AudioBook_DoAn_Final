@@ -10,10 +10,12 @@ import Foundation
 import SwiftyJSON
 
 class Category {
+    var id : Int
     var name : String
     var image : String
     
     init(_json : JSON) {
+        self.id = _json["id_category"].intValue
         self.name = _json["name"].stringValue
         self.image = _json["Image"].stringValue
     }

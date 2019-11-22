@@ -89,7 +89,10 @@ extension CategoryScreen : UICollectionViewDelegate, UICollectionViewDataSource,
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("a")
+        let nextScreen = CategoryDetailScreen()
+        nextScreen.id_category = self.dataArray[indexPath.row].id
+        nextScreen.name_category = self.dataArray[indexPath.row].name
+        self.navigationController?.pushViewController(nextScreen, animated: true)
     }
 }
 

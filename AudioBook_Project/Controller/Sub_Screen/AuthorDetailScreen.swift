@@ -95,7 +95,7 @@ class AuthorDetailScreen: UIViewController {
         contentLabel.Top == introLabel.Bottom + 5
         contentLabel.Bottom == containerView2.Bottom - 10
     }
-    
+     
     fileprivate func setUpContainer3(){
         mainScrollView.sv(containerView3)
         containerView3.centerHorizontally().width(100%).Top == containerView2.Bottom + 5
