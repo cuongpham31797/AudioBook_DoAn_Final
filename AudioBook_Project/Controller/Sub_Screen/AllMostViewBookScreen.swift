@@ -25,9 +25,11 @@ class AllMostViewBookScreen: UIViewController {
         mostViewBookService.delegate = self
         mostViewBookService.getMostViewBook(url: MOST_VIEW_ALL_BOOK)
         
-        self.setUpNavigation()
+        setUpNavigationController(viewController: self, title: "Top xem nhiều") {
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "back-2"), style: .done, target: self, action: #selector(onTapBack))
+        }
         self.setUpLayout()
-        self.setUpCollectionView()
+        self.setUpAllCollectionView()
     }
     
     fileprivate func setUpLayout(){
@@ -38,37 +40,18 @@ class AllMostViewBookScreen: UIViewController {
         allMostViewCollectionView.Bottom == view.safeAreaLayoutGuide.Bottom - 10
     }
     
-    fileprivate func setUpCollectionView(){
-        self.allMostViewCollectionView.delegate = self
-        self.allMostViewCollectionView.dataSource = self
-        self.allMostViewCollectionView.register(BookCell.self, forCellWithReuseIdentifier: "most_view")
-        self.allMostViewCollectionView.backgroundColor = .white
-        self.allMostViewCollectionView.bounces = false
-        if let flowLayout = self.allMostViewCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flowLayout.scrollDirection = .vertical
+    fileprivate func setUpAllCollectionView(){
+        setUpCollectionView(parent: self,
+                            collectionView: allMostViewCollectionView,
+                            scrollDirection: .vertical) {
+            self.allMostViewCollectionView.register(BookCell.self, forCellWithReuseIdentifier: BookCell.className)
         }
-        self.allMostViewCollectionView.showsVerticalScrollIndicator = false
     }
     
     deinit {
         print("all most view deinit")
     }
     
-    
-//NOTE: Setup navigation
-    fileprivate func setUpNavigation(){
-        //NOTE: thay đổi font chữ, màu chữ và màu nền của navigation title
-        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white,
-                              NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 22)]
-        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
-        self.navigationController?.navigationBar.barTintColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
-        
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "back-2"), style: .done, target: self, action: #selector(onTapBack))
-        self.navigationItem.leftBarButtonItem?.tintColor = .white
-        //---------------------------------------------------------------------------------------------------
-        self.navigationItem.title = "Top xem nhiều"
-    }
-//----------------------------------------------------------------------------------------------
     @objc func onTapBack(){
         self.navigationController?.popViewController(animated: true)
     }
@@ -80,10 +63,10 @@ extension AllMostViewBookScreen : UICollectionViewDelegate, UICollectionViewDele
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = self.allMostViewCollectionView.dequeueReusableCell(withReuseIdentifier: "most_view", for: indexPath) as? BookCell else { fatalError() }
-        cell.avatarImage.sd_setImage(with: URL(string: self.allMostViewDataArray[indexPath.row].image), completed: nil)
-        cell.nameLabel.text = self.allMostViewDataArray[indexPath.row].name
-        return cell
+        return allMostViewCollectionView.customDequeReuseable(type: BookCell.self, indexPath: indexPath, handle: { (cell) in
+            cell.avatarImage.sd_setImage(with: URL(string: self.allMostViewDataArray[indexPath.row].image), completed: nil)
+            cell.nameLabel.text = self.allMostViewDataArray[indexPath.row].name
+        })
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

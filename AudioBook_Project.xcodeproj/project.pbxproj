@@ -7,11 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8D11925C236A7EFF0092D22D /* RelationBookCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D11925B236A7EFF0092D22D /* RelationBookCell.swift */; };
 		8D11E5BD23682C040028054C /* BookDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D11E5BC23682C040028054C /* BookDetailScreen.swift */; };
-		8D12912A2373FD3100D5E062 /* RegisterScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1291292373FD3000D5E062 /* RegisterScreen.swift */; };
-		8D12912C237415F900D5E062 /* CodeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D12912B237415F900D5E062 /* CodeScreen.swift */; };
-		8D12912E23741A3A00D5E062 /* ResetPasswordScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D12912D23741A3A00D5E062 /* ResetPasswordScreen.swift */; };
 		8D1393422361856400003670 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1393412361856400003670 /* CategoryCell.swift */; };
 		8D1393442361882300003670 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1393432361882300003670 /* Category.swift */; };
 		8D13934623618FCA00003670 /* CategoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D13934523618FCA00003670 /* CategoryService.swift */; };
@@ -20,6 +16,7 @@
 		8D38E5382372C2EE0095D2CF /* MyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D38E5362372C2EE0095D2CF /* MyTextField.swift */; };
 		8D38E5392372C2EE0095D2CF /* ValidateTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D38E5372372C2EE0095D2CF /* ValidateTextField.swift */; };
 		8D38E53B2372C3600095D2CF /* LoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D38E53A2372C3600095D2CF /* LoginScreen.swift */; };
+		8D3BFE1023A22C0D00C834E1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D3BFE0F23A22C0D00C834E1 /* GoogleService-Info.plist */; };
 		8D4B5F25237D30AD0063726C /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4B5F24237D30AD0063726C /* Book.swift */; };
 		8D4B5F27237D32600063726C /* NewBookService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4B5F26237D32600063726C /* NewBookService.swift */; };
 		8D4B5F2B237D4F240063726C /* MostLikedBookService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4B5F2A237D4F240063726C /* MostLikedBookService.swift */; };
@@ -40,6 +37,10 @@
 		8D93FE2023868AAF008901E6 /* BookResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D93FE1F23868AAF008901E6 /* BookResultCell.swift */; };
 		8DA8F05A237DB3D700BE7ABA /* MostViewBookService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA8F059237DB3D700BE7ABA /* MostViewBookService.swift */; };
 		8DCF786E23726EB100F877E5 /* AuthorDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF786D23726EB100F877E5 /* AuthorDetailScreen.swift */; };
+		8DD601A723ECFB1E0005976D /* UITableView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD601A623ECFB1E0005976D /* UITableView + Extension.swift */; };
+		8DD601AA23ED24AC0005976D /* FirstCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD601A923ED24AC0005976D /* FirstCell.swift */; };
+		8DD601AC23ED24C10005976D /* ActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD601AB23ED24C10005976D /* ActionCell.swift */; };
+		8DD601AE23ED24D70005976D /* TitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD601AD23ED24D70005976D /* TitleCell.swift */; };
 		8DDAA86E23614890007EE307 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DDAA86D23614890007EE307 /* AppDelegate.swift */; };
 		8DDAA87523614891007EE307 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DDAA87423614891007EE307 /* Assets.xcassets */; };
 		8DDAA87823614891007EE307 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DDAA87623614891007EE307 /* LaunchScreen.storyboard */; };
@@ -54,11 +55,7 @@
 /* Begin PBXFileReference section */
 		348D7391AEE46C5E36EF2DA2 /* Pods-AudioBook_Project.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioBook_Project.release.xcconfig"; path = "Target Support Files/Pods-AudioBook_Project/Pods-AudioBook_Project.release.xcconfig"; sourceTree = "<group>"; };
 		5079F689752D7B966AEE9EF7 /* Pods-AudioBook_Project.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AudioBook_Project.debug.xcconfig"; path = "Target Support Files/Pods-AudioBook_Project/Pods-AudioBook_Project.debug.xcconfig"; sourceTree = "<group>"; };
-		8D11925B236A7EFF0092D22D /* RelationBookCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationBookCell.swift; sourceTree = "<group>"; };
 		8D11E5BC23682C040028054C /* BookDetailScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailScreen.swift; sourceTree = "<group>"; };
-		8D1291292373FD3000D5E062 /* RegisterScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterScreen.swift; sourceTree = "<group>"; };
-		8D12912B237415F900D5E062 /* CodeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeScreen.swift; sourceTree = "<group>"; };
-		8D12912D23741A3A00D5E062 /* ResetPasswordScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordScreen.swift; sourceTree = "<group>"; };
 		8D1393412361856400003670 /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		8D1393432361882300003670 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		8D13934523618FCA00003670 /* CategoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryService.swift; sourceTree = "<group>"; };
@@ -67,6 +64,7 @@
 		8D38E5362372C2EE0095D2CF /* MyTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTextField.swift; sourceTree = "<group>"; };
 		8D38E5372372C2EE0095D2CF /* ValidateTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidateTextField.swift; sourceTree = "<group>"; };
 		8D38E53A2372C3600095D2CF /* LoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreen.swift; sourceTree = "<group>"; };
+		8D3BFE0F23A22C0D00C834E1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8D4B5F24237D30AD0063726C /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		8D4B5F26237D32600063726C /* NewBookService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewBookService.swift; sourceTree = "<group>"; };
 		8D4B5F2A237D4F240063726C /* MostLikedBookService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MostLikedBookService.swift; sourceTree = "<group>"; };
@@ -88,6 +86,10 @@
 		8DA8F059237DB3D700BE7ABA /* MostViewBookService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MostViewBookService.swift; sourceTree = "<group>"; };
 		8DCF786D23726EB100F877E5 /* AuthorDetailScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorDetailScreen.swift; sourceTree = "<group>"; };
 		8DCF788D2372837100F877E5 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		8DD601A623ECFB1E0005976D /* UITableView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView + Extension.swift"; sourceTree = "<group>"; };
+		8DD601A923ED24AC0005976D /* FirstCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstCell.swift; sourceTree = "<group>"; };
+		8DD601AB23ED24C10005976D /* ActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionCell.swift; sourceTree = "<group>"; };
+		8DD601AD23ED24D70005976D /* TitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCell.swift; sourceTree = "<group>"; };
 		8DDAA86A23614890007EE307 /* AudioBook_Project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioBook_Project.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DDAA86D23614890007EE307 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8DDAA87423614891007EE307 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -148,9 +150,6 @@
 			isa = PBXGroup;
 			children = (
 				8D38E53A2372C3600095D2CF /* LoginScreen.swift */,
-				8D1291292373FD3000D5E062 /* RegisterScreen.swift */,
-				8D12912B237415F900D5E062 /* CodeScreen.swift */,
-				8D12912D23741A3A00D5E062 /* ResetPasswordScreen.swift */,
 			);
 			path = "Login & Register";
 			sourceTree = "<group>";
@@ -168,9 +167,32 @@
 			path = My_Custom_UI;
 			sourceTree = "<group>";
 		};
+		8DD601A523ECFB010005976D /* UI + Extension */ = {
+			isa = PBXGroup;
+			children = (
+				8DD601A623ECFB1E0005976D /* UITableView + Extension.swift */,
+			);
+			path = "UI + Extension";
+			sourceTree = "<group>";
+		};
+		8DD601A823ED247C0005976D /* TableViewCell & CollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				8D1393412361856400003670 /* CategoryCell.swift */,
+				8D5EA8BF23714DC900CD7F20 /* AuthorCell.swift */,
+				8D4B5F2C237D54D20063726C /* BookCell.swift */,
+				8D93FE1F23868AAF008901E6 /* BookResultCell.swift */,
+				8DD601A923ED24AC0005976D /* FirstCell.swift */,
+				8DD601AB23ED24C10005976D /* ActionCell.swift */,
+				8DD601AD23ED24D70005976D /* TitleCell.swift */,
+			);
+			path = "TableViewCell & CollectionViewCell";
+			sourceTree = "<group>";
+		};
 		8DDAA86123614890007EE307 = {
 			isa = PBXGroup;
 			children = (
+				8D3BFE0F23A22C0D00C834E1 /* GoogleService-Info.plist */,
 				8DCF788D2372837100F877E5 /* README.md */,
 				8DDAA86C23614890007EE307 /* AudioBook_Project */,
 				8DDAA86B23614890007EE307 /* Products */,
@@ -216,13 +238,10 @@
 		8DDAA880236148D0007EE307 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				8DD601A823ED247C0005976D /* TableViewCell & CollectionViewCell */,
+				8DD601A523ECFB010005976D /* UI + Extension */,
 				8D38E5362372C2EE0095D2CF /* MyTextField.swift */,
 				8D65E6A7237D00AC00B338E9 /* My_Custom_UI */,
-				8D1393412361856400003670 /* CategoryCell.swift */,
-				8D11925B236A7EFF0092D22D /* RelationBookCell.swift */,
-				8D5EA8BF23714DC900CD7F20 /* AuthorCell.swift */,
-				8D4B5F2C237D54D20063726C /* BookCell.swift */,
-				8D93FE1F23868AAF008901E6 /* BookResultCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -274,6 +293,7 @@
 				8DDAA86723614890007EE307 /* Frameworks */,
 				8DDAA86823614890007EE307 /* Resources */,
 				6396C43A08941B0C0E1E8AE5 /* [CP] Embed Pods Frameworks */,
+				4F50420097C574E4F7986B46 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -324,12 +344,30 @@
 			files = (
 				8DDAA87823614891007EE307 /* LaunchScreen.storyboard in Resources */,
 				8DDAA87523614891007EE307 /* Assets.xcassets in Resources */,
+				8D3BFE1023A22C0D00C834E1 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		4F50420097C574E4F7986B46 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AudioBook_Project/Pods-AudioBook_Project-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AudioBook_Project/Pods-AudioBook_Project-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AudioBook_Project/Pods-AudioBook_Project-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		6396C43A08941B0C0E1E8AE5 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -383,12 +421,12 @@
 				8D65E6A6237CFC4400B338E9 /* TitleLabel.swift in Sources */,
 				8DDAA884236148F1007EE307 /* MainScreen.swift in Sources */,
 				8D4B5F2B237D4F240063726C /* MostLikedBookService.swift in Sources */,
-				8D12912C237415F900D5E062 /* CodeScreen.swift in Sources */,
 				8D1F6782237114EC00BC850E /* SearchScreen.swift in Sources */,
 				8D38E5382372C2EE0095D2CF /* MyTextField.swift in Sources */,
 				8D4B5F25237D30AD0063726C /* Book.swift in Sources */,
 				8DCF786E23726EB100F877E5 /* AuthorDetailScreen.swift in Sources */,
 				8D65E6AD237D10A400B338E9 /* MyScrollView.swift in Sources */,
+				8DD601AE23ED24D70005976D /* TitleCell.swift in Sources */,
 				8D93FE1E238686F6008901E6 /* BookService.swift in Sources */,
 				8D11E5BD23682C040028054C /* BookDetailScreen.swift in Sources */,
 				8D13934623618FCA00003670 /* CategoryService.swift in Sources */,
@@ -397,19 +435,19 @@
 				8D1393422361856400003670 /* CategoryCell.swift in Sources */,
 				8DDAA889236157F1007EE307 /* PlayingScreen.swift in Sources */,
 				8D38E53B2372C3600095D2CF /* LoginScreen.swift in Sources */,
-				8D11925C236A7EFF0092D22D /* RelationBookCell.swift in Sources */,
 				8D927C23237E89E70075C77D /* AllMostViewBookScreen.swift in Sources */,
 				8D5EA8BE2371492700CD7F20 /* Author.swift in Sources */,
+				8DD601A723ECFB1E0005976D /* UITableView + Extension.swift in Sources */,
 				8D38E5392372C2EE0095D2CF /* ValidateTextField.swift in Sources */,
 				8DDAA88B2361581D007EE307 /* AccountScreen.swift in Sources */,
 				8D65E6A4237CFA6A00B338E9 /* AllButton.swift in Sources */,
 				8D139348236191CC00003670 /* Constant.swift in Sources */,
 				8D65E6A9237D020200B338E9 /* ContainerView.swift in Sources */,
 				8DA8F05A237DB3D700BE7ABA /* MostViewBookService.swift in Sources */,
-				8D12912E23741A3A00D5E062 /* ResetPasswordScreen.swift in Sources */,
+				8DD601AA23ED24AC0005976D /* FirstCell.swift in Sources */,
 				8DDAA86E23614890007EE307 /* AppDelegate.swift in Sources */,
-				8D12912A2373FD3100D5E062 /* RegisterScreen.swift in Sources */,
 				8D5EA8C023714DC900CD7F20 /* AuthorCell.swift in Sources */,
+				8DD601AC23ED24C10005976D /* ActionCell.swift in Sources */,
 				8D927C25237E9F8E0075C77D /* AllMostLikeBookScreen.swift in Sources */,
 				8D5EA8C2237152C500CD7F20 /* AuthorService.swift in Sources */,
 				8D4B5F2D237D54D20063726C /* BookCell.swift in Sources */,

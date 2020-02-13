@@ -12,6 +12,7 @@ import Alamofire
 import SwiftyJSON
 import SDWebImage
 import SVProgressHUD
+import SCLAlertView
 
 class SearchScreen: UIViewController {
     
@@ -45,9 +46,13 @@ class SearchScreen: UIViewController {
         self.bookService.delegate = self
         self.bookService.loadBook()
         
-        self.setUpNavigation()
+        setUpNavigationController(viewController: self, title: "Tìm kiếm") {
+             self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "back-2"), style: .done, target: self, action: #selector(onTapBack))
+        }
         self.setUpLayout()
-        self.setUpTableView()
+        setUpTableView(parent: self, tableView: resultTableView, isSelect: true) {
+            resultTableView.register(BookResultCell.self, forCellReuseIdentifier: BookResultCell.className)
+        }
     
         //gán delegate cho search bar
         self.searchBar.delegate = self
@@ -60,26 +65,16 @@ class SearchScreen: UIViewController {
         resultTableView.Bottom == view.safeAreaLayoutGuide.Bottom
     }
     
-    fileprivate func setUpTableView(){
-        resultTableView.delegate = self
-        resultTableView.dataSource = self
-        resultTableView.register(BookResultCell.self, forCellReuseIdentifier: "book")
-        resultTableView.backgroundColor = .white
-        resultTableView.bounces = false
-    }
-    
     deinit {
         print("search screen deinit")
     }
     
-    fileprivate func setUpNavigation(){
-        self.navigationItem.title = "Tìm kiếm"
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "back-2"), style: .done, target: self, action: #selector(onTapBack))
-        self.navigationItem.leftBarButtonItem?.tintColor = .white
-    }
-    
     @objc func onTapBack(){
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func onTapChoose(){
+        print("choose")
     }
 }
 
@@ -93,7 +88,7 @@ extension SearchScreen : UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = self.resultTableView.dequeueReusableCell(withIdentifier: "book", for: indexPath) as? BookResultCell else { fatalError() }
+        guard let cell = self.resultTableView.dequeueReusableCell(withIdentifier: BookResultCell.className, for: indexPath) as? BookResultCell else { fatalError() }
         if searching == false{
             return cell
         }else{
@@ -105,7 +100,6 @@ extension SearchScreen : UITableViewDelegate, UITableViewDataSource {
             }
             return cell
         }
-        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -170,7 +164,15 @@ extension SearchScreen : UISearchBarDelegate {
             self.resultTableView.reloadData()
             searchBar.resignFirstResponder()
         }else if searchText.count < 3 {
-            print("Bạn phải nhập 3 ký tự trở lên")
+            let alert = SCLAlertView()
+            alert.showWarning("Lỗi",
+                              subTitle: "Bạn phải nhập 3 ký tự trở lên",
+                              closeButtonTitle: "OK",
+                              timeout: nil,
+                              colorStyle: 0x42C1F7,
+                              colorTextButton: 0xFFFFFF,
+                              circleIconImage: nil,
+                              animationStyle: .topToBottom)
         }else{
             self.result = self.nameArray.filter({$0.lowercased().contains(find: searchText.lowercased())})
             self.searching = true

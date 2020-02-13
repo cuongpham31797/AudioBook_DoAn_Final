@@ -10,6 +10,7 @@ pod 'SDWebImage'
 pod 'SteviaLayout'
 pod 'SVProgressHUD'
 pod 'FSPagerView'
+pod 'GoogleSignIn'
 pod 'SCLAlertView'
   # Pods for AudioBook_Project
 

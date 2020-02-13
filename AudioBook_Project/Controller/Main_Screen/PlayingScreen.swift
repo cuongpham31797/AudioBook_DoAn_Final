@@ -8,8 +8,13 @@
 
 import UIKit
 import Stevia
+import Alamofire
+import SwiftyJSON
+import SDWebImage
 
 class PlayingScreen: UIViewController {
+    
+    var id_book : Int!
     
     var authorName : String!
     var categoryName : String!
@@ -18,16 +23,17 @@ class PlayingScreen: UIViewController {
     
     var isPlaying : Bool = true
     
-    private lazy var authorLabel : UILabel = {
+    private lazy var authorLabel : SubTitleLabel = SubTitleLabel()
+    
+    private lazy var bookNameLabel : UILabel = {
         let label = UILabel()
-        label.sizeToFit()
         label.textColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
-        label.text = "Tác giả: "
-        label.font = UIFont.boldSystemFont(ofSize: 18)
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.textAlignment = .center
         return label
     }()
     
-    private lazy var categoryLabel : SubTitleLabel = SubTitleLabel("Thể loại:")
+    private lazy var categoryLabel : SubTitleLabel = SubTitleLabel("Thể loại: ")
     
     private lazy var trapLabel : SubTitleLabel = SubTitleLabel("Phần: ")
     
@@ -98,39 +104,58 @@ class PlayingScreen: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        self.authorName = "Kim Dung"
-        self.bookName = "Anh hùng xạ điêu"
-        self.categoryName = "Kiếm hiệp"
         self.trapNumber = 1
         
-        setUpNavigation()
+        //setUpNavigation()
+        setUpNavigationController(viewController: self, title: self.bookName ?? "") { }
         setUpLayout()
         
-        authorLabel.text = authorLabel.text! + authorName
-        categoryLabel.text = categoryLabel.text! + categoryName
         trapLabel.text = trapLabel.text! + String(self.trapNumber)
-        discImage.image = UIImage(named: "chi-pheo")
-        
-        self.navigationController?.tabBarItem.badgeValue = "1"
         
         self.finishLabel.text = "59:59"
         self.beginLabel.text = "00:01"
+        
+        self.tabBarItem.badgeValue = "N"
     }
     
-    fileprivate func setUpNavigation(){
-    //NOTE: thay đổi font chữ và màu chữ của navigation title
-        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white,
-                              NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 22)]
-        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
-        self.navigationController?.navigationBar.barTintColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
-    //---------------------------------------------------------------------------------------------------
-        self.navigationItem.title = self.bookName
+    override func viewWillAppear(_ animated: Bool) {
+        if let id = self.id_book {
+            self.updateUI(id)
+        }else{
+            return
+        }
+    }
+    
+//NOTE: update các UI như tên truyện, tên tác giả, tên thể loại, đĩa
+    fileprivate func updateUI(_ id : Int){
+        let para : Parameters = [
+            "id_book" : id
+        ]
+        Alamofire.request("http://cuongpham.atwebpages.com/get_detail_book_by_id.php",
+                          method: .post,
+                          parameters: para,
+                          encoding: URLEncoding.default,
+                          headers: nil).responseJSON { (response) in
+                            switch response.result{
+                            case .failure(_):
+                                print("error")
+                            case .success(let value):
+                                let json = JSON(value)
+                                self.bookNameLabel.text = json["book_detail"]["book_name"].stringValue
+                                self.authorLabel.text = json["book_detail"]["author_name"].stringValue
+                                self.categoryLabel.text = json["book_detail"]["category_name"].stringValue
+                                self.discImage.sd_setImage(with: URL(string: json["book_detail"]["image"].stringValue), completed: nil)
+                            }
+        }
     }
     
     fileprivate func setUpLayout(){
-        view.sv(authorLabel, categoryLabel, trapLabel, discImage, timeSlider, beginLabel, finishLabel, controlStackView)
+        view.sv(bookNameLabel, authorLabel, categoryLabel, trapLabel, discImage, timeSlider, beginLabel, finishLabel, controlStackView, bookNameLabel)
         
-        authorLabel.centerHorizontally().Top == view.safeAreaLayoutGuide.Top + 25
+        bookNameLabel.centerHorizontally().Top == view.safeAreaLayoutGuide.Top + 20
+        bookNameLabel.Leading == view.Leading + 15
+        bookNameLabel.Trailing == view.Trailing - 15
+        authorLabel.centerHorizontally().Top == bookNameLabel.Bottom + 20
         categoryLabel.centerHorizontally().Top == authorLabel.Bottom + 20
         trapLabel.centerHorizontally().Top == categoryLabel.Bottom + 20
         
@@ -151,11 +176,12 @@ class PlayingScreen: UIViewController {
         controlStackView.addArrangedSubview(nextButton)
         controlStackView.addArrangedSubview(listButton)
         
-        controlStackView.centerHorizontally().width(90%).height(45).Top == finishLabel.Bottom + 30
+        controlStackView.centerHorizontally().width(90%).height(45).Bottom == view.safeAreaLayoutGuide.Bottom - 20
     }
     
     @objc func onTapPlay(){
         print("play")
+    
     }
     
     @objc func onTapNext(){

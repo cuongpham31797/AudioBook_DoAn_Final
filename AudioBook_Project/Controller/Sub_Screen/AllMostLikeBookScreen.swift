@@ -26,9 +26,11 @@ class AllMostLikeBookScreen: UIViewController {
         mostLikeBookService.delegate = self
         mostLikeBookService.getMostLikedBook(url: MOST_LIKED_ALL_BOOK)
         
-        self.setUpNavigation()
+        setUpNavigationController(viewController: self, title: "Top ưa thích") {
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "back-2"), style: .done, target: self, action: #selector(onTapBack))
+        }
         self.setUpLayout()
-        setUpCollectionView()
+        setUpAllCollectionView()
     }
     
     fileprivate func setUpLayout(){
@@ -39,32 +41,13 @@ class AllMostLikeBookScreen: UIViewController {
         allMostLikeCollectionView.Bottom == view.safeAreaLayoutGuide.Bottom - 10
     }
     
-    fileprivate func setUpCollectionView(){
-        self.allMostLikeCollectionView.delegate = self
-        self.allMostLikeCollectionView.dataSource = self
-        self.allMostLikeCollectionView.register(BookCell.self, forCellWithReuseIdentifier: "most_like")
-        //self.allMostLikeCollectionView.bounces = false
-        if let flowLayout = self.allMostLikeCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flowLayout.scrollDirection = .vertical
+    fileprivate func setUpAllCollectionView(){
+        setUpCollectionView(parent: self,
+                            collectionView: allMostLikeCollectionView, scrollDirection: .vertical) {
+              self.allMostLikeCollectionView.register(BookCell.self, forCellWithReuseIdentifier: BookCell.className)
         }
-        self.allMostLikeCollectionView.showsVerticalScrollIndicator = false
-        self.allMostLikeCollectionView.backgroundColor = .white
     }
     
-//NOTE: Setup navigation
-    fileprivate func setUpNavigation(){
-        //NOTE: thay đổi font chữ, màu chữ và màu nền của navigation title
-        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white,
-                              NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 22)]
-        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
-        self.navigationController?.navigationBar.barTintColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
-        
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "back-2"), style: .done, target: self, action: #selector(onTapBack))
-        self.navigationItem.leftBarButtonItem?.tintColor = .white
-        //---------------------------------------------------------------------------------------------------
-        self.navigationItem.title = "Top ưa thích"
-    }
-//----------------------------------------------------------------------------------------------
     @objc func onTapBack(){
         self.navigationController?.popViewController(animated: true)
     }
@@ -76,10 +59,10 @@ extension AllMostLikeBookScreen : UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = self.allMostLikeCollectionView.dequeueReusableCell(withReuseIdentifier: "most_like", for: indexPath) as? BookCell else { fatalError() }
-        cell.avatarImage.sd_setImage(with: URL(string: self.allMostLikeDataArray[indexPath.row].image), completed: nil)
-        cell.nameLabel.text = self.allMostLikeDataArray[indexPath.row].name
-        return cell
+        return allMostLikeCollectionView.customDequeReuseable(type: BookCell.self, indexPath: indexPath, handle: { (cell) in
+            cell.avatarImage.sd_setImage(with: URL(string: self.allMostLikeDataArray[indexPath.row].image), completed: nil)
+            cell.nameLabel.text = self.allMostLikeDataArray[indexPath.row].name
+        })
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

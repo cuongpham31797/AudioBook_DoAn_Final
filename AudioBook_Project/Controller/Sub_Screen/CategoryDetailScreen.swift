@@ -29,27 +29,20 @@ class CategoryDetailScreen: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
-        self.setUpNavigation()
+       // self.setUpNavigation()
         self.setUpLayout()
-        self.setUpCollectionView()
+        self.setUpAllCollectionView()
         SVProgressHUD.show()
         print(id_category!)
+        
+        setUpNavigationController(viewController: self, title: self.name_category!) {
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "back-2"), style: .done, target: self, action: #selector(self.onTapBack))
+        }
     }
     
-//NOTE: Setup navigation
-    fileprivate func setUpNavigation(){
-        //NOTE: thay đổi font chữ, màu chữ và màu nền của navigation title
-        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white,
-                              NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 22)]
-        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
-        self.navigationController?.navigationBar.barTintColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
-        
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "back-2"), style: .done, target: self, action: #selector(onTapBack))
-        self.navigationItem.leftBarButtonItem?.tintColor = .white
-        //---------------------------------------------------------------------------------------------------
-        self.navigationItem.title = self.name_category!
+    deinit {
+        print("Category Detail Screen deinit")
     }
-//-----------------------------------------------------------------------------------------------------------------------
     
     fileprivate func setUpLayout(){
         view.sv(bookCollectionView)
@@ -59,16 +52,12 @@ class CategoryDetailScreen: UIViewController {
         bookCollectionView.Bottom == view.safeAreaLayoutGuide.Bottom - 20
     }
     
-    fileprivate func setUpCollectionView(){
-        self.bookCollectionView.delegate = self
-        self.bookCollectionView.dataSource = self
-        self.bookCollectionView.register(BookCell.self, forCellWithReuseIdentifier: "book")
-        if let flowLayout = self.bookCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flowLayout.scrollDirection = .vertical
+    fileprivate func setUpAllCollectionView(){
+        setUpCollectionView(parent: self,
+                            collectionView: bookCollectionView,
+                            scrollDirection: .vertical) {
+            self.bookCollectionView.register(BookCell.self, forCellWithReuseIdentifier: BookCell.className)
         }
-        self.bookCollectionView.backgroundColor = .white
-        self.bookCollectionView.bounces = false
-        self.bookCollectionView.showsVerticalScrollIndicator = false
     }
     
     fileprivate func loadData(){
@@ -110,10 +99,10 @@ extension CategoryDetailScreen : UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = self.bookCollectionView.dequeueReusableCell(withReuseIdentifier: "book", for: indexPath) as? BookCell else { fatalError() }
-        cell.avatarImage.sd_setImage(with: URL(string: self.bookArray[indexPath.row].image), completed: nil)
-        cell.nameLabel.text = self.bookArray[indexPath.row].name
-        return cell
+        return bookCollectionView.customDequeReuseable(type: BookCell.self, indexPath: indexPath, handle: { (cell) in
+            cell.avatarImage.sd_setImage(with: URL(string: self.bookArray[indexPath.row].image), completed: nil)
+            cell.nameLabel.text = self.bookArray[indexPath.row].name
+        })
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -129,6 +118,8 @@ extension CategoryDetailScreen : UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("a")
+        let nextScreen = BookDetailScreen()
+        nextScreen.id_book = self.bookArray[indexPath.row].id
+        self.navigationController?.pushViewController(nextScreen, animated: true)
     }
 }

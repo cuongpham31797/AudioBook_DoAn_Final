@@ -24,23 +24,19 @@ class CategoryScreen: UIViewController {
         SVProgressHUD.show()
         service.delegate = self
         service.getCategory()
-        setUpNavigation()
+        setUpNavigationController(viewController: self, title: "Thể loại") {  }
         setUpLayout()
-        setUpCollectionView()
+        setUpCollectionView(parent: self, collectionView: categoryCollectionView, scrollDirection: .vertical) {
+            categoryCollectionView.register(CategoryCell.self, forCellWithReuseIdentifier: CategoryCell.className)
+        }
     }
     
     deinit {
         print("category deinit")
     }
     
-    fileprivate func setUpNavigation(){
-        //NOTE: thay đổi font chữ và màu chữ của navigation title
-        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white,
-                              NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 22)]
-        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
-        self.navigationController?.navigationBar.barTintColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
-        //---------------------------------------------------------------------------------------------------
-        self.navigationItem.title = "Thể loại"
+    override func viewDidDisappear(_ animated: Bool) {
+        SVProgressHUD.dismiss()
     }
     
     fileprivate func setUpLayout(){
@@ -51,17 +47,6 @@ class CategoryScreen: UIViewController {
         categoryCollectionView.Bottom == view.safeAreaLayoutGuide.Bottom - 10
     }
     
-    fileprivate func setUpCollectionView(){
-        categoryCollectionView.delegate = self
-        categoryCollectionView.dataSource = self
-        categoryCollectionView.register(CategoryCell.self, forCellWithReuseIdentifier: "Category")
-        if let flowLayout = categoryCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flowLayout.scrollDirection = .vertical
-        }
-        categoryCollectionView.backgroundColor = .white
-        categoryCollectionView.showsVerticalScrollIndicator = false
-        categoryCollectionView.bounces = false
-    }
 }
 
 extension CategoryScreen : UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -70,10 +55,10 @@ extension CategoryScreen : UICollectionViewDelegate, UICollectionViewDataSource,
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = categoryCollectionView.dequeueReusableCell(withReuseIdentifier: "Category", for: indexPath) as? CategoryCell else { fatalError() }
-        cell.nameLabel.text = self.dataArray[indexPath.row].name
-        cell.mainImage.sd_setImage(with: URL(string: self.dataArray[indexPath.row].image), completed: nil)
-        return cell
+        return categoryCollectionView.customDequeReuseable(type: CategoryCell.self, indexPath: indexPath, handle: { (cell) in
+            cell.nameLabel.text = self.dataArray[indexPath.row].name
+            cell.mainImage.sd_setImage(with: URL(string: self.dataArray[indexPath.row].image), completed: nil)
+        })
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

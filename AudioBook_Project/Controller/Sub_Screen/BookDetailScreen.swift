@@ -15,6 +15,12 @@ import SVProgressHUD
 
 class BookDetailScreen: UIViewController {
     
+    lazy var subView : UIView = {
+        let view = UIView()
+        view.backgroundColor = .red
+        return view
+    }()
+    
     var id_book : Int!
     private lazy var mainScrollView : MyScrollView = MyScrollView()
     private lazy var relateArray : Array<Book> = []
@@ -38,7 +44,6 @@ class BookDetailScreen: UIViewController {
     
     lazy var authorLabel : UILabel = {
         let label = UILabel()
-        //label.sizeToFit()
         label.font = UIFont.systemFont(ofSize: 16)
         label.textColor = .black
         label.numberOfLines = 2
@@ -47,7 +52,6 @@ class BookDetailScreen: UIViewController {
     
     lazy var categoryLabel : UILabel = {
         let label = UILabel()
-        //label.sizeToFit()
         label.font = UIFont.systemFont(ofSize: 16)
         label.textColor = .black
         label.numberOfLines = 2
@@ -182,9 +186,11 @@ class BookDetailScreen: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         SVProgressHUD.show()
-        self.setUpNavigation()
+        setUpNavigationController(viewController: self, title: "Chi tiết truyện") {
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "back-2"), style: .done, target: self, action: #selector(onTapBack))
+        }
         self.setUpLayout()
-        self.setUpCollectionView()
+        self.setUpAllCollectionView()
         self.getData()
         print(self.id_book!)
     }
@@ -239,20 +245,6 @@ class BookDetailScreen: UIViewController {
         self.viewLabel.text = String(source["book"]["views"].intValue)
         self.likeLabel.text = String(source["book"]["liked"].intValue)
         SVProgressHUD.dismiss()
-    }
-//----------------------------------------------------------------------------------------------
-//NOTE: Setup navigation
-    fileprivate func setUpNavigation(){
-    //NOTE: thay đổi font chữ, màu chữ và màu nền của navigation title
-        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white,
-                              NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 22)]
-        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
-        self.navigationController?.navigationBar.barTintColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
-        
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "back-2"), style: .done, target: self, action: #selector(onTapBack))
-        self.navigationItem.leftBarButtonItem?.tintColor = .white
-    //---------------------------------------------------------------------------------------------------
-        self.navigationItem.title = "Chi tiết truyện"
     }
 //----------------------------------------------------------------------------------------------
 //NOTE: layout cho view đầu tiên
@@ -370,20 +362,16 @@ class BookDetailScreen: UIViewController {
         setUpLayoutForThirdView()
         setUpLayoutForFourthView()
         setUpLayoutForFifthView()
-        setUpCollectionView()
+        setUpAllCollectionView()
     }
 //----------------------------------------------------------------------------------------------
 //NOTE: setup relation collection view
-    fileprivate func setUpCollectionView(){
-        relationBookCollectionView.delegate = self
-        relationBookCollectionView.dataSource = self
-        relationBookCollectionView.register(BookCell.self, forCellWithReuseIdentifier: "book")
-        if let flowLayout = self.relationBookCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flowLayout.scrollDirection = .horizontal
+    fileprivate func setUpAllCollectionView(){
+        setUpCollectionView(parent: self,
+                            collectionView: relationBookCollectionView,
+                            scrollDirection: .horizontal) {
+             relationBookCollectionView.register(BookCell.self, forCellWithReuseIdentifier: BookCell.className)
         }
-        relationBookCollectionView.backgroundColor = .white
-        relationBookCollectionView.bounces = false
-        relationBookCollectionView.showsHorizontalScrollIndicator = false
     }
 //----------------------------------------------------------------------------------------------
     @objc func onTapLike(){
@@ -394,12 +382,17 @@ class BookDetailScreen: UIViewController {
         print("Share")
     }
     
+//NOTE: khi tap vào nút listen, truyền id_book sang màn hình playing để chuẩn bị phát nhạc
     @objc func onTapListen(){
         print("listen")
+        let playingScreen = self.tabBarController?.viewControllers?[2] as! PlayingScreen
+        playingScreen.id_book = self.id_book!
     }
-    
+//----------------------------------------------------------------------------------------------
     @objc func onTapViewAllComment(){
         print("view all comment")
+        
+        
     }
     
     @objc func onTapBack(){
@@ -413,10 +406,10 @@ extension BookDetailScreen : UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = self.relationBookCollectionView.dequeueReusableCell(withReuseIdentifier: "book", for: indexPath) as? BookCell else { fatalError() }
-        cell.avatarImage.sd_setImage(with: URL(string: self.relateArray[indexPath.row].image), completed: nil)
-        cell.nameLabel.text = self.relateArray[indexPath.row].name
-        return cell
+        return relationBookCollectionView.customDequeReuseable(type: BookCell.self, indexPath: indexPath, handle: { (cell) in
+            cell.avatarImage.sd_setImage(with: URL(string: self.relateArray[indexPath.row].image), completed: nil)
+            cell.nameLabel.text = self.relateArray[indexPath.row].name
+        })
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

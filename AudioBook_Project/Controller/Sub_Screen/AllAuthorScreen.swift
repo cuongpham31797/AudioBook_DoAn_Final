@@ -10,6 +10,7 @@ import Stevia
 import UIKit
 import SDWebImage
 import SVProgressHUD
+//import SCLAlertView
 
 class AllAuthorScreen: UIViewController {
     
@@ -25,25 +26,23 @@ class AllAuthorScreen: UIViewController {
         service.delegate = self
         service.loadLimitAuthor(url: AUTHOR_ALL_URL)
         
-        self.setUpNavigation()
+        setUpNavigationController(viewController: self, title: "Các tác giả") {
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "back-2"), style: .done, target: self, action: #selector(onTapBack))
+        }
         self.setUpLayout()
-        self.setUpCollectionView()
+        self.setUpAllCollectionView()
     }
     
     deinit {
         print("all author deinit")
     }
     
-    fileprivate func setUpCollectionView(){
-        self.authorCollectionView.delegate = self
-        self.authorCollectionView.dataSource = self
-        self.authorCollectionView.register(AuthorCell.self, forCellWithReuseIdentifier: "author")
-        if let flowLayout = self.authorCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flowLayout.scrollDirection = .vertical
+    fileprivate func setUpAllCollectionView(){
+        setUpCollectionView(parent: self,
+                            collectionView: authorCollectionView,
+                            scrollDirection: .horizontal) {
+            self.authorCollectionView.register(AuthorCell.self, forCellWithReuseIdentifier: AuthorCell.className)
         }
-        self.authorCollectionView.backgroundColor = .clear
-        self.authorCollectionView.bounces = false
-        self.authorCollectionView.showsVerticalScrollIndicator = false
     }
     
     fileprivate func setUpLayout(){
@@ -52,12 +51,6 @@ class AllAuthorScreen: UIViewController {
         authorCollectionView.Trailing == view.Trailing - 15
         authorCollectionView.Top == view.safeAreaLayoutGuide.Top + 20
         authorCollectionView.Bottom == view.safeAreaLayoutGuide.Bottom - 10
-    }
-    
-    fileprivate func setUpNavigation(){
-        self.navigationItem.title = "Tác giả"
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "back-2"), style: .done, target: self, action: #selector(onTapBack))
-        self.navigationItem.leftBarButtonItem?.tintColor = .white
     }
     
     @objc func onTapBack(){
@@ -71,10 +64,10 @@ extension AllAuthorScreen : UICollectionViewDelegate, UICollectionViewDataSource
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = authorCollectionView.dequeueReusableCell(withReuseIdentifier: "author", for: indexPath) as? AuthorCell else { fatalError() }
-        cell.nameLabel.text = self.dataArray[indexPath.row].name
-        cell.avatarImage.sd_setImage(with: URL(string: self.dataArray[indexPath.row].image), completed: nil)
-        return cell
+        return authorCollectionView.customDequeReuseable(type: AuthorCell.self, indexPath: indexPath, handle: { (cell) in
+            cell.nameLabel.text = self.dataArray[indexPath.row].name
+            cell.avatarImage.sd_setImage(with: URL(string: self.dataArray[indexPath.row].image), completed: nil)
+        })
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

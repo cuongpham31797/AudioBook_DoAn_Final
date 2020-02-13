@@ -58,7 +58,9 @@ class AuthorDetailScreen: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         SVProgressHUD.show()
-        setUpNavigation()
+        setUpNavigationController(viewController: self, title: "") {
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "back-2"), style: .done, target: self, action: #selector(onTapBack))
+        }
         setUpLayout()
     }
     
@@ -111,25 +113,15 @@ class AuthorDetailScreen: UIViewController {
         relateCollection.Top == relateLabel.Bottom + 10
         relateCollection.Bottom == containerView3.Bottom - 10
         
-        self.setUpCollectionView()
+        self.setUpAllCollectionView()
     }
     
-    fileprivate func setUpCollectionView(){
-        self.relateCollection.delegate = self
-        self.relateCollection.dataSource = self
-        self.relateCollection.register(BookCell.self, forCellWithReuseIdentifier: "book")
-        
-        self.relateCollection.backgroundColor = .clear
-        if let flowLayout = self.relateCollection.collectionViewLayout as? UICollectionViewFlowLayout {
-            flowLayout.scrollDirection = .vertical
+    fileprivate func setUpAllCollectionView(){
+        setUpCollectionView(parent: self,
+                            collectionView: relateCollection,
+                            scrollDirection: .vertical) {
+            self.relateCollection.register(BookCell.self, forCellWithReuseIdentifier: BookCell.className)
         }
-        self.relateCollection.showsVerticalScrollIndicator = false
-        self.relateCollection.bounces = false
-    }
-    
-    fileprivate func setUpNavigation(){
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "back-2"), style: .done, target: self, action: #selector(onTapBack))
-        self.navigationItem.leftBarButtonItem?.tintColor = .white
     }
     
     fileprivate func loadDetailAuthor(){
@@ -191,10 +183,10 @@ extension AuthorDetailScreen : UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = self.relateCollection.dequeueReusableCell(withReuseIdentifier: "book", for: indexPath) as? BookCell else { fatalError() }
-        cell.avatarImage.sd_setImage(with: URL(string: self.relateArray[indexPath.row].image), completed: nil)
-        cell.nameLabel.text = self.relateArray[indexPath.row].name
-        return cell
+        return relateCollection.customDequeReuseable(type: BookCell.self, indexPath: indexPath, handle: { (cell) in
+            cell.avatarImage.sd_setImage(with: URL(string: self.relateArray[indexPath.row].image), completed: nil)
+            cell.nameLabel.text = self.relateArray[indexPath.row].name
+        })
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

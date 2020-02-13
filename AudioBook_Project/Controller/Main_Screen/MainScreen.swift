@@ -81,10 +81,11 @@ class MainScreen: UIViewController {
         mostViewBookService.delegate = self
         mostViewBookService.getMostViewBook(url: MOST_VIEW_LIMIT_BOOK)
         
-        setUpAuthorCollectionView()
-        setUpMostLikeCollectionView()
-        setUpMostViewCollectionVIew()
-        setUpNavigation()
+        setUpAllCollectionView()
+        
+        setUpNavigationController(viewController: self, title: "Trang chủ") {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "search"), style: .done, target: self, action: #selector(self.onTapSearch))
+        }
         setUpLayout()
     }
     
@@ -92,54 +93,22 @@ class MainScreen: UIViewController {
         print("main screen deinit")
     }
     
-    fileprivate func setUpNavigation(){
-    //NOTE: thay đổi font chữ, màu chữ và màu nền của navigation title
-        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white,
-                              NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 22)]
-        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
-        self.navigationController?.navigationBar.barTintColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)
-    //---------------------------------------------------------------------------------------------------
-    //NOTE: thay đổi màu của right bar button
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "search"), style: .done, target: self, action: #selector(onTapSearch))
-        self.navigationItem.rightBarButtonItem?.tintColor = .white
-    //---------------------------------------------------------------------------------------------------
-        self.navigationItem.title = "Trang chủ"
-    }
-    
-    fileprivate func setUpAuthorCollectionView(){
-        self.authorCollectionView.delegate = self
-        self.authorCollectionView.dataSource = self
-        self.authorCollectionView.register(AuthorCell.self, forCellWithReuseIdentifier: "Author")
-        if let flowLayout = self.authorCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flowLayout.scrollDirection = .horizontal
+    fileprivate func setUpAllCollectionView(){
+        setUpCollectionView(parent: self,
+                            collectionView: authorCollectionView,
+                            scrollDirection: .horizontal) {
+            self.authorCollectionView.register(AuthorCell.self, forCellWithReuseIdentifier: AuthorCell.className)
         }
-        self.authorCollectionView.backgroundColor = .white
-        self.authorCollectionView.bounces = false
-        self.authorCollectionView.showsHorizontalScrollIndicator = false
-    }
-    
-    fileprivate func setUpMostLikeCollectionView(){
-        self.mostLikeCollectionView.delegate = self
-        self.mostLikeCollectionView.dataSource = self
-        self.mostLikeCollectionView.register(BookCell.self, forCellWithReuseIdentifier: "most_like")
-        if let flowLayout = self.mostLikeCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flowLayout.scrollDirection = .horizontal
+        setUpCollectionView(parent: self,
+                            collectionView: mostLikeCollectionView,
+                            scrollDirection: .horizontal) {
+            self.mostLikeCollectionView.register(BookCell.self, forCellWithReuseIdentifier: BookCell.className)
         }
-        self.mostLikeCollectionView.backgroundColor = .white
-        self.mostLikeCollectionView.bounces = false
-        self.mostLikeCollectionView.showsHorizontalScrollIndicator = false
-    }
-    
-    fileprivate func setUpMostViewCollectionVIew(){
-        self.mostViewCollection.delegate = self
-        self.mostViewCollection.dataSource = self
-        self.mostViewCollection.register(BookCell.self, forCellWithReuseIdentifier: "most_view")
-        if let flowLayout = self.mostViewCollection.collectionViewLayout as? UICollectionViewFlowLayout {
-            flowLayout.scrollDirection = .horizontal
+        setUpCollectionView(parent: self,
+                            collectionView: mostViewCollection,
+                            scrollDirection: .horizontal) {
+            self.mostViewCollection.register(BookCell.self, forCellWithReuseIdentifier: BookCell.className)
         }
-        self.mostViewCollection.backgroundColor = .white
-        self.mostViewCollection.bounces = false
-        self.mostViewCollection.showsHorizontalScrollIndicator = false
     }
     
     fileprivate func setUpLayout(){
@@ -250,23 +219,22 @@ extension MainScreen : UICollectionViewDelegate, UICollectionViewDataSource, UIC
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == authorCollectionView{
-            guard let cell = authorCollectionView.dequeueReusableCell(withReuseIdentifier: "Author", for: indexPath) as? AuthorCell else { fatalError() }
-            cell.nameLabel.text = self.authorDataArray[indexPath.row].name
-            cell.avatarImage.sd_setImage(with: URL(string: self.authorDataArray[indexPath.row].image), completed: nil)
-            return cell
+            return authorCollectionView.customDequeReuseable(type: AuthorCell.self, indexPath: indexPath, handle: { (cell) in
+                cell.nameLabel.text = self.authorDataArray[indexPath.row].name
+                cell.avatarImage.sd_setImage(with: URL(string: self.authorDataArray[indexPath.row].image), completed: nil)
+            })
         }else if collectionView == mostViewCollection{
-            guard let cell = mostViewCollection.dequeueReusableCell(withReuseIdentifier: "most_view", for: indexPath) as? BookCell else { fatalError() }
-            cell.avatarImage.sd_setImage(with: URL(string: self.mostViewBookDataArray[indexPath.row].image), completed: nil)
-            cell.nameLabel.text = self.mostViewBookDataArray[indexPath.row].name
-            return cell
+            return mostViewCollection.customDequeReuseable(type: BookCell.self, indexPath: indexPath, handle: { (cell) in
+                cell.avatarImage.sd_setImage(with: URL(string: self.mostViewBookDataArray[indexPath.row].image), completed: nil)
+                cell.nameLabel.text = self.mostViewBookDataArray[indexPath.row].name
+            })
         }else{
-            guard let cell = mostLikeCollectionView.dequeueReusableCell(withReuseIdentifier: "most_like", for: indexPath) as? BookCell else { fatalError() }
-            cell.avatarImage.sd_setImage(with: URL(string: self.mostLikedBookDataArray[indexPath.row].image),
-                                         completed: nil)
-            cell.nameLabel.text = self.mostLikedBookDataArray[indexPath.row].name
-            return cell
+            return mostLikeCollectionView.customDequeReuseable(type: BookCell.self, indexPath: indexPath, handle: { (cell) in
+                cell.avatarImage.sd_setImage(with: URL(string: self.mostLikedBookDataArray[indexPath.row].image),
+                                             completed: nil)
+                cell.nameLabel.text = self.mostLikedBookDataArray[indexPath.row].name
+            })
         }
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -277,7 +245,6 @@ extension MainScreen : UICollectionViewDelegate, UICollectionViewDataSource, UIC
         }else{
             return CGSize(width: 130, height: self.mostLikeCollectionView.frame.size.height)
         }
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -308,8 +275,7 @@ extension MainScreen : FSPagerViewDelegate, FSPagerViewDataSource {
     
     func pagerView(_ pagerView: FSPagerView, cellForItemAt index: Int) -> FSPagerViewCell {
         let cell = pagerView.dequeueReusableCell(withReuseIdentifier: "cell", at: index)
-        cell.imageView?.sd_setImage(with: URL(string: self.newestBookDataArray[index].image) ,
-                                    completed: nil)
+        cell.imageView?.sd_setImage(with: URL(string: self.newestBookDataArray[index].image) , completed: nil)
         return cell
     }
     
